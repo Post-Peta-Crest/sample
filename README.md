@@ -1,37 +1,62 @@
-## Welcome to GitHub Pages
+# Process-in-Process (PiP)
 
-You can use the [editor on GitHub](https://github.com/Post-Peta-Crest/sample/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+## What if PiP
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Process-in-Process, or PiP in short, is a library which provides you
+another parallel execution mode.  Now, multi-core and many-core CPUs
+are getting quite common, and people are writing and running parallel
+programs on those CPUs. There are two widely used parallel execution
+models; multi-process and multi-thread. The typical multi-process
+model can be found in MPI programs. And the typical multi-thread model
+can be found in OpenMP programs. 
 
-### Markdown
+A parallel program consists of several (or many) execution entities,
+processes or threads, and most importantly, they communicate and/or
+interact with the others. In the multi-process model, each process has
+itw own virtual address space and it is not allowed to access the data
+owned by the other process. In the multi-thread model, threads share
+the same virtual address space, but all statically allocated variables
+are shared among the thread. 
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+In the multi-process model, nothing is shared. This makes
+inter-process communication hard. In the multi-thread model, everything
+is shared. The shared variables and data must be protected to avoid
+race conditions. The pros of a model can be the cons of the other
+model.  There is no race condition happens on variables and data since
+each process has its own variable and data in the multi-process
+model. Threads can easily interact and communicate woth the thread,
+since they share the same virtual address space.
 
-```markdown
-Syntax highlighted code block
+There is the 3rd execution mode, which has no name yet, to
+take the best of the  two worlds; multi-process and multi-thread. In
+this model, variables are privatized so that each task has its own
+variable set and tasks share the same virtual address space.  Here the
+execution entity in this model is called *task* since it does not
+follow the definitions of process and thread.  Tasks can interact and
+communicate with others easily and race conditions can only happens on
+the *explicitly* shared variables and/or data. Since tasks run in the
+same virtual address space, any data owned by the tasks can be
+accessed if the addresses of the variables and/or data are known. In
+this way, the cons of the conventional models trun into the pros.
 
-# Header 1
-## Header 2
-### Header 3
+This ides is not new. However, the implementations of the 3rd
+execution model requires dedicated OS kernel or specialize language
+processing system consisting of compilers, linker, runtime systems,
+and debugger. None of them is not easy to try and deploy. PiP is
+the first implementation as a user-level library, no need of dedicated
+OS kernel nor language system. Thus, PiP is very portable and easy to
+try and deploy.
 
-- Bulleted
-- List
+## Do you want to try PiP ?
 
-1. Numbered
-2. List
+We are working to make the PiP library open right now. It will be
+available at https://github.com/RIKEN-SysSoft.
 
-**Bold** and _Italic_ and `Code` text
+## Reference
 
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Post-Peta-Crest/sample/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+_Process-in-Process: Techniques for Practical Address-Space Sharing_,
+Atsushi Hori, Min Si, Balazs Gerofi, Masamichi Takagi, Jai Dayal,
+Pavan Balaji and Yutaka Ishikawa. ACM HPDC 2018
+The 27th International Symposium on High-Performance Parallel and
+Distributed Computing Tempe, Arizona, USA - June 11-15, 2018. (winner
+of the Karsten Schwan Best Paper Award)
